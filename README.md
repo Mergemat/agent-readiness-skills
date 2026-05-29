@@ -1,105 +1,111 @@
 # Agent Readiness Skills
 
-Small, composable skills for making repositories usable by coding agents.
+Набор небольших навыков для подготовки репозиториев и задач к работе с агентами-разработчиками.
 
-[Русская версия](README.ru.md)
+[English version](README.en.md)
 
-This repo replaces large readiness manuals with reusable procedures. Project-specific facts stay in the target repository. Procedures live here as skills.
+Здесь нет контекста CRPT, внутренних сервисов, тикетов, адресов, владельцев или корпоративных правил. Репозиторий переносимый: его можно использовать в любом проекте.
 
-## Principles
+## Зачем это нужно
 
-- Concise: `SKILL.md` is the entry point, not a manual.
-- One thing: each skill owns one repeatable workflow.
-- Composable: skills can be chained, but none owns the whole process.
-- Progressive: detailed formats live in `references/` and are loaded only when needed.
-- Harness-agnostic: no Claude, Codex, Cursor, or MCP-specific dependency in core instructions.
+Большие методички быстро устаревают. Этот репозиторий устроен иначе:
 
-## Skills
+- повторяемые действия живут в навыках;
+- факты конкретного проекта остаются в самом проекте;
+- `SKILL.md` остается короткой точкой входа;
+- подробные форматы лежат рядом, в `references/`;
+- инструкции не завязаны на Claude, Codex, Cursor или другой запускатель.
 
-- **[scaffold-agent-docs](skills/scaffold-agent-docs/SKILL.md)** - create minimal agent-readable project docs.
-- **[audit-agent-docs](skills/audit-agent-docs/SKILL.md)** - audit whether existing docs let an agent start safely.
-- **[clarify-domain-docs](skills/clarify-domain-docs/SKILL.md)** - resolve project language and durable decisions into `CONTEXT.md` and ADRs.
-- **[collect-task-context](skills/collect-task-context/SKILL.md)** - gather task-specific context before implementation.
-- **[write-agent-brief](skills/write-agent-brief/SKILL.md)** - write a durable implementation brief for an agent.
-- **[audit-runtime-policy](skills/audit-runtime-policy/SKILL.md)** - check tool, connector, skill, and hook policy for a repo or task.
+## Принципы
 
-## Workflow
+- Кратко: навык должен быть понятен с первого экрана.
+- Одна ответственность: один навык отвечает за один рабочий сценарий.
+- Сочетаемость: навыки можно выстраивать в цепочку, но каждый полезен отдельно.
+- Постепенное раскрытие: подробности читаются только тогда, когда понадобились.
+- Независимость от запускателя: навыки не должны требовать конкретный инструмент.
 
-These skills are meant to be chained, but each one stays useful on its own.
+## Навыки
 
-### New Repo: Make It Agent-Readable
+- **[scaffold-agent-docs](skills/scaffold-agent-docs/SKILL.md)** - создает минимальную документацию проекта для агентов.
+- **[audit-agent-docs](skills/audit-agent-docs/SKILL.md)** - проверяет, может ли агент безопасно начать работу по существующей документации.
+- **[clarify-domain-docs](skills/clarify-domain-docs/SKILL.md)** - уточняет язык проекта и записывает термины в `CONTEXT.md`, а устойчивые решения в ADR.
+- **[collect-task-context](skills/collect-task-context/SKILL.md)** - собирает минимальный контекст под одну задачу.
+- **[write-agent-brief](skills/write-agent-brief/SKILL.md)** - пишет задание для агента-исполнителя.
+- **[audit-runtime-policy](skills/audit-runtime-policy/SKILL.md)** - проверяет, какие инструменты, подключения, навыки и действия разрешены.
 
-Use this when a repository has no agent docs, stale onboarding docs, or a large readiness pack nobody wants to maintain.
+## Порядок работы
 
-1. Run `/scaffold-agent-docs` to create the smallest set of project facts: entry instructions, domain glossary, build/test docs, owners, and tool policy.
-2. Run `/audit-agent-docs` to check whether an agent can answer where to start, what to change, what to avoid, and how to verify work.
-3. Fix only real gaps. Do not create empty placeholder docs.
+Навыки можно вызывать по одному или связывать в цепочку.
 
-### New Feature Or Bug: Prepare The Task
+### Новый репозиторий: сделать его понятным агенту
 
-Use this before handing work to an implementation agent.
+Используйте этот сценарий, если в проекте нет понятной документации для агента, старая документация устарела или вместо живых фактов есть большой набор шаблонов.
 
-1. Run `/clarify-domain-docs` if the request uses fuzzy or overloaded language.
-2. Run `/collect-task-context` to gather relevant files, interfaces, tests, constraints, and verification commands.
-3. Run `/audit-runtime-policy` if the task may use network, external connectors, MCP, additional skills, package installs, deploy, secrets, or destructive actions.
-4. Run `/write-agent-brief` to produce a durable implementation brief.
+1. Запустите `/scaffold-agent-docs`, чтобы создать минимальный набор фактов: стартовые инструкции, словарь проекта, команды сборки и проверки, владельцев и правила использования инструментов.
+2. Запустите `/audit-agent-docs`, чтобы проверить, понимает ли агент, откуда начать, что можно менять, что нельзя трогать и как проверить результат.
+3. Исправьте только реальные пробелы. Не создавайте пустые файлы ради формальной готовности.
 
-### Before Agent Execution: Check Safety
+### Новая задача: подготовить работу для агента
 
-Use this when work is ready but the allowed runtime is unclear.
+Используйте этот сценарий перед тем, как отдавать агенту фичу, баг или рефакторинг.
 
-1. Run `/audit-runtime-policy`.
-2. Confirm which tools are `allowed`, `read_only`, `allowed_with_approval`, `forbidden`, or `unknown`.
-3. Add the smallest missing policy entry to the target repo.
+1. Запустите `/clarify-domain-docs`, если в задаче есть размытые термины или спорные решения.
+2. Запустите `/collect-task-context`, чтобы собрать нужные файлы, интерфейсы, ограничения, тесты и команды проверки.
+3. Запустите `/audit-runtime-policy`, если задаче может понадобиться сеть, внешнее подключение, MCP, дополнительные навыки, установка пакетов, деплой, секреты или разрушительные действия.
+4. Запустите `/write-agent-brief`, чтобы получить устойчивое задание для агента-исполнителя.
 
-### After A Session: Improve The Source Of Truth
+### Перед запуском агента: проверить ограничения
 
-Use this when implementation exposed missing language, stale docs, or unclear decisions.
+Используйте этот сценарий, когда задача готова, но неясно, какие действия разрешены.
 
-1. Run `/clarify-domain-docs` to update `CONTEXT.md` or record an ADR.
-2. Run `/audit-agent-docs` to make sure the new facts are discoverable.
+1. Запустите `/audit-runtime-policy`.
+2. Проверьте, какие действия разрешены, доступны только для чтения, требуют согласования, запрещены или не описаны.
+3. Добавьте в проект минимальное недостающее правило, если без него агенту придется угадывать.
 
-## Install
+### После работы агента: обновить источник правды
 
-After publishing this repository to GitHub, install all skills with:
+Используйте этот сценарий, если во время работы выяснились новые термины, устаревшие документы или важные решения.
 
-```bash
-npx skills add <owner>/agent-readiness-skills --skill '*'
-```
+1. Запустите `/clarify-domain-docs`, чтобы обновить `CONTEXT.md` или записать ADR.
+2. Запустите `/audit-agent-docs`, чтобы проверить, что новые факты легко найти.
 
-Install one skill:
+## Установка
 
-```bash
-npx skills add <owner>/agent-readiness-skills --skill audit-agent-docs
-```
-
-List skills without installing:
+Установить все навыки:
 
 ```bash
-npx skills add <owner>/agent-readiness-skills --list
+npx skills add Mergemat/agent-readiness-skills --skill '*'
 ```
 
-Replace `<owner>` with the GitHub owner or organization.
+Установить один навык:
 
-## Project Docs These Skills Expect
+```bash
+npx skills add Mergemat/agent-readiness-skills --skill audit-agent-docs
+```
 
-Target repositories can use any layout, but the default lightweight layout is:
+Посмотреть список без установки:
+
+```bash
+npx skills add Mergemat/agent-readiness-skills --list
+```
+
+## Что должно оставаться в проекте
+
+В проектном репозитории должны жить реальные факты проекта:
 
 ```text
 AGENTS.md
 CONTEXT.md
-docs/
-  adr/
-  agents/
-    build.md
-    testing.md
-    owners.md
-    tool-policy.md
+docs/adr/
+docs/agents/build.md
+docs/agents/testing.md
+docs/agents/owners.md
+docs/agents/tool-policy.md
 ```
 
-Use fewer files when fewer facts exist. Do not create placeholder docs just to satisfy a standard.
+Создавайте только те файлы, для которых есть реальные факты. Пустые шаблоны не делают проект готовым.
 
-## Validation
+## Проверка этого репозитория
 
 ```bash
 bun run validate
