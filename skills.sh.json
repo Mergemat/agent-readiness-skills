@@ -1,0 +1,31 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Setup",
+      "description": "Create and audit minimal project docs for coding agents.",
+      "skills": [
+        "scaffold-agent-docs",
+        "audit-agent-docs"
+      ]
+    },
+    {
+      "title": "Task Prep",
+      "description": "Prepare task-specific context and durable implementation briefs.",
+      "skills": [
+        "collect-task-context",
+        "write-agent-brief"
+      ]
+    },
+    {
+      "title": "Policy",
+      "description": "Clarify domain language, decisions, and runtime permissions.",
+      "skills": [
+        "clarify-domain-docs",
+        "audit-runtime-policy"
+      ]
+    }
+  ]
+}
+

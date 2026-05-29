@@ -1,0 +1,10 @@
+{
+  "name": "agent-readiness-skills",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "bun run scripts/validate-skills.ts"
+  },
+  "devDependencies": {}
+}
+
